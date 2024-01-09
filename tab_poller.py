@@ -29,7 +29,10 @@ def record_current_session(store):
 def do_polling():
   store = Store() # get a db connection
   while True:
-    record_current_session(store)
+    try:
+      record_current_session(store)
+    except RuntimeError as e:
+      print(e)
     time.sleep(PERIOD)
 
 def launch_polling_thread():
