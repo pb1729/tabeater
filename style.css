@@ -1,0 +1,63 @@
+body {
+  font-family: monospace;
+  background-color: blueviolet;
+  color: cornsilk;
+  font-size: 1.6em;
+}
+
+h1 {
+  font-family: cursive;
+  color: bisque;
+  font-size: 3em;
+  margin: 0;
+}
+
+div.titlediv {
+  margin: 20px;
+  padding: 20px;
+  background-color: indigo;
+}
+
+div.main-container {
+  margin: 20px;
+  padding: 20px;
+  background-color: indigo;
+}
+
+div.sessions {
+  margin: 20px;
+}
+
+div.session {
+  background-color: gold;
+  color: black;
+  padding: 4px;
+  margin: 8px;
+}
+
+div.session p {
+  margin: 0;
+  font-weight: bold;
+}
+
+div.tab {
+  padding: 4px;
+  margin: 0px;
+  display: inline-flex;
+  width: 19%;
+  white-space: nowrap;
+  overflow: hidden;
+  background-color: whitesmoke;
+  color: #122;
+  border: solid grey 1px;
+}
+
+img.icon {
+  height: 1.4em;
+  margin: 0;
+  padding: 0;
+  vertical-align: middle;
+}
+
+
+
