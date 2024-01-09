@@ -31,7 +31,7 @@ def do_polling():
   while True:
     try:
       record_current_session(store)
-    except RuntimeError as e:
+    except BaseException as e:
       print(e)
     time.sleep(PERIOD)
 
