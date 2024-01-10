@@ -4,13 +4,15 @@ from html import escape
 # hint for interactivity:
 # <button onclick="js();"> TEXT </button>
 
-def tab_to_html(tab, sess_id):
+def tab_to_html(tab):
   return "".join([
-    '<div class="tab" id="%d %s">' % (sess_id, tab.url),
-    '<a href="%s">' % tab.url,
+    '<div class="tab" id="%d" taburl="%s">' % (tab.id, tab.url),
+    '<button onclick="del_tab(%d)">X</button>' % tab.id,
+    ' <a href="%s">' % tab.url,
     '<img src="%s" class="icon"/> ' % tab.image,
     escape(tab.title),
-    '</a> </div>\n',
+    '</a>',
+    '</div>',
   ])
 
 def render_session(session):
@@ -23,7 +25,7 @@ def render_session(session):
     ' || ',
     '<button onclick="open_all_tabs(%d)">open all</button>' % session.id,
     '</p>',
-    *[tab_to_html(tab, session.id) for tab in session.tabs],
+    *[tab_to_html(tab) for tab in session.tabs],
     '</div>',
   ])
 

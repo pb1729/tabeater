@@ -62,6 +62,11 @@ class TabEater:
             self.store.delete_session(sess_id)
             self.rerender()
             return "<xml></xml>"
+        elif path[:5] == '/tab/':
+            tab_id = int(path[5:])
+            self.store.delete_tab(tab_id)
+            self.rerender()
+            return "<xml></xml>"
         else:
             raise NotImplementedError("DELETE not implemented for this path!")
 
