@@ -66,6 +66,11 @@ class Store:
       session.tabs.sort(key=(lambda tab: tab.id)) # sort tabs by oldest first
     sessions.sort(key=(lambda sess: -sess.id)) # most recent sessions first
     return sessions
+  def delete_session(self, sess_id):
+    c = self.db.cursor()
+    c.execute("DELETE FROM sess WHERE (id=?)", [sess_id])
+    c.execute("DELETE FROM tab WHERE (sess=?)", [sess_id])
+    self.db.commit()
 
 
 

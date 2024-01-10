@@ -4,9 +4,9 @@ from html import escape
 # hint for interactivity:
 # <button onclick="js();"> TEXT </button>
 
-def tab_to_html(tab):
+def tab_to_html(tab, sess_id):
   return "".join([
-    '<div class="tab">',
+    '<div class="tab" id="%d %s">' % (sess_id, tab.url),
     '<a href="%s">' % tab.url,
     '<img src="%s" class="icon"/> ' % tab.image,
     escape(tab.title),
@@ -15,9 +15,15 @@ def tab_to_html(tab):
 
 def render_session(session):
   return ''.join([
-    '<div class="session">',
-    '<p>%s</p>' % escape(session.name),
-    *[tab_to_html(tab) for tab in session.tabs],
+    '<div class="session" id="%d">' % session.id,
+    '<p>',
+    escape(session.name),
+    ' || ',
+    '<button onclick="del_sess(%d)">delete</button>' % session.id,
+    ' || ',
+    '<button onclick="open_all_tabs(%d)">open all</button>' % session.id,
+    '</p>',
+    *[tab_to_html(tab, session.id) for tab in session.tabs],
     '</div>',
   ])
 

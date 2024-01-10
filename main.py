@@ -57,7 +57,13 @@ class TabEater:
     def POST(self, path, handler):
         raise NotImplementedError("POST not implemented!")
     def DELETE(self, path, handler):
-        raise NotImplementedError("DELETE not implemented!")
+        if path[:9] == '/session/':
+            sess_id = int(path[9:])
+            self.store.delete_session(sess_id)
+            self.rerender()
+            return "<xml></xml>"
+        else:
+            raise NotImplementedError("DELETE not implemented for this path!")
 
 
 TabEaterEventServer = create_event_server_class("TabEaterEventServer",
