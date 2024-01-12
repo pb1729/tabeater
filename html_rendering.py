@@ -1,14 +1,11 @@
 from html import escape
 
-# TODO: remove these lines
-# hint for interactivity:
-# <button onclick="js();"> TEXT </button>
 
 def tab_to_html(tab):
   return "".join([
     '<div class="tab" id="%d" taburl="%s">' % (tab.id, tab.url),
     '<button onclick="del_tab(%d)">X</button>' % tab.id,
-    ' <a href="%s">' % tab.url,
+    ' <a href="%s" target="_blank">' % tab.url,
     '<img src="%s" class="icon"/> ' % tab.image,
     escape(tab.title),
     '</a>',
