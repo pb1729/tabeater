@@ -24,15 +24,14 @@ def record_current_session(store):
     sess_id, tabs = get_current_tabs()
     store.save_session(sess_id, tabs)
   except FileNotFoundError as e:
-    print(e)
+    pass # not a big problem if file is not present while the browser is closed
 
 def do_polling():
   store = Store() # get a db connection
+  print("starting polling")
   while True:
     try:
       record_current_session(store)
-    except FileNotFoundError:
-      pass # not a big problem if file is not present when the browser is closed
     except BaseException as e:
       print(e)
     time.sleep(PERIOD)
