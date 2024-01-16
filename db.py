@@ -69,6 +69,7 @@ class Store:
   def delete_tab(self, tab_id):
     c = self.db.cursor()
     c.execute("DELETE FROM tab WHERE (id=?)", [tab_id])
+    self.db.commit()
   def delete_session(self, sess_id):
     c = self.db.cursor()
     c.execute("DELETE FROM sess WHERE (id=?)", [sess_id])
