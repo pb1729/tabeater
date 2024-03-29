@@ -1,8 +1,12 @@
 
-function send_req(type, url) {
+function send_req(type, url, data) {
   var request = new XMLHttpRequest();
   request.open(type, url, true);
-  request.send();
+  if (data) { // optional parameter
+    request.send(data);
+  } else {
+    request.send();
+  }
 }
 
 function refresh() {
@@ -14,7 +18,16 @@ function del_sess(sess_id) {
 }
 
 function del_tab(tab_id) {
-  send_req('DELETE', '/tab/' + tab_id)
+  send_req('DELETE', '/tab/' + tab_id);
+}
+
+function set_tab_lock(tab_id, lock) {
+  let lock_str = lock ? "1" : "0";
+  send_req('POST', '/tab/lock/' + tab_id, lock_str);
+}
+
+function on_checkbox_click(box, tab_id) {
+  set_tab_lock(tab_id, box.checked);
 }
 
 function open_all_tabs(sess_id) {
@@ -43,6 +56,8 @@ function setEventSourceCallback() {
     sessions_div.innerHTML = event.data;
   };
 }
+
+
 
 
 /////////////////////

@@ -7,19 +7,20 @@ DB_NAME = "/tabs.db"
 
 
 class DBTab:
-  def __init__(self, idx, sess, url, title, image):
+  def __init__(self, idx, sess, url, title, image, state):
     self.id = idx
     self.sess = sess
     self.url = url
     self.title = title
     self.image = image
+    self.state = state
   def save_to(self, cursor):
-    cursor.execute("INSERT INTO tab(sess, url, title, image) VALUES (?, ?, ?, ?)",
-      [self.sess, self.url, self.title, self.image])
+    cursor.execute("INSERT INTO tab(sess, url, title, image, state) VALUES (?, ?, ?, ?, ?)",
+      [self.sess, self.url, self.title, self.image, self.state])
   @staticmethod
   def from_parsed(tab, sess):
     """ initialize a DBTab from a regular Tab object derived by parsing """
-    return DBTab(None, sess, tab.url, tab.title, tab.image)
+    return DBTab(None, sess, tab.url, tab.title, tab.image, 0)
 
 class DBSession:
   def __init__(self, idx, name):
@@ -34,21 +35,25 @@ class Store:
   def __init__(self):
     self.db = sqlite3.connect(self.db_path)
   def save_session(self, sess_id, tabs):
+    tabs_dict = {tab.url: tab for tab in tabs}
     c = self.db.cursor()
     # ensure that this session exists
     DBSession(sess_id, "Session #%d" % sess_id).save_to(c)
     # make a list of any already-existing tabs belonging to this session
     c.execute("SELECT url FROM tab WHERE (sess=?)", [sess_id])
     prev = [tup[0] for tup in c.fetchall()]
-    # save all current tabs
+    # get the list of current tabs
     curr = []
-    for tab in tabs:
-      DBTab.from_parsed(tab, sess_id).save_to(c)
-      curr.append(tab.url)
+    for url in tabs_dict:
+      curr.append(url)
+    # save newly created tabs
+    new = set(curr) - set(prev)
+    for url in new:
+      DBTab.from_parsed(tabs_dict[url], sess_id).save_to(c)
     # remove tabs that existed previously but not now
     removed = set(prev) - set(curr)
-    for url in removed:
-      c.execute("DELETE FROM tab WHERE (sess=?) AND (url=?)", [sess_id, url])
+    for url in removed: # only want to remove tabs that are not locked (i.e. state=0)
+      c.execute("DELETE FROM tab WHERE (sess=?) AND (url=?) and (state=0)", [sess_id, url])
     # finish up:
     self.db.commit()
   def load_tabs(self, sess_id):
@@ -74,6 +79,10 @@ class Store:
     c = self.db.cursor()
     c.execute("DELETE FROM sess WHERE (id=?)", [sess_id])
     c.execute("DELETE FROM tab WHERE (sess=?)", [sess_id])
+    self.db.commit()
+  def set_tab_lock(self, tab_id, lock):
+    c = self.db.cursor()
+    c.execute("UPDATE tab SET state=? WHERE (id=?)", [lock, tab_id])
     self.db.commit()
 
 

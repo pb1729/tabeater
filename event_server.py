@@ -59,8 +59,10 @@ class EventServer(BaseHTTPRequestHandler):
     responder = self.get_responder()
     self.send_reply(responder.GET(self.path, self))
   def do_POST(self):
+    content_len = int(self.headers.get('Content-Length'))
+    post_body = self.rfile.read(content_len)
     responder = self.get_responder()
-    self.send_reply(responder.POST(self.path, self))
+    self.send_reply(responder.POST(self.path, self, post_body))
   def do_DELETE(self):
     responder = self.get_responder()
     self.send_reply(responder.DELETE(self.path, self))

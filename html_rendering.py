@@ -2,9 +2,12 @@ from html import escape
 
 
 def tab_to_html(tab):
+  checked_str = "checked" if tab.state == 1 else ""
+  lock_icon = "🔒" if tab.state == 1 else "🔓"
   return "".join([
     '<div class="tab" id="%d" taburl="%s">' % (tab.id, tab.url),
-    '<button onclick="del_tab(%d)">X</button>' % tab.id,
+    '<button onclick="del_tab(%d)">❌</button> ' % tab.id,
+    '%s<input type="checkbox" onclick="on_checkbox_click(this, \'%s\')" %s /> ' % (lock_icon, tab.id, checked_str),
     ' <a href="%s" target="_blank">' % tab.url,
     '<img src="%s" class="icon"/> ' % tab.image,
     escape(tab.title),

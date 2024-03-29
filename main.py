@@ -54,8 +54,13 @@ class TabEater:
             return self.serve_file(path[1:])
         else:
             return ErrStatus(404, "404: page not found")
-    def POST(self, path, handler):
-        raise NotImplementedError("POST not implemented!")
+    def POST(self, path, handler, post_body):
+        if path[:10] == '/tab/lock/':
+          tab_id = int(path[10:])
+          lock = int(post_body)
+          self.store.set_tab_lock(tab_id, lock)
+          self.rerender()
+          return "<xml></xml>"
     def DELETE(self, path, handler):
         if path[:9] == '/session/':
             sess_id = int(path[9:])

@@ -7,6 +7,7 @@ CREATE TABLE tab (
   url TEXT NOT NULL,
   title TEXT NOT NULL,
   image TEXT,
+  state INT NOT NULL, /* 0 is default state, 1 means "locked" */
   UNIQUE(sess, url) ON CONFLICT REPLACE
 );
 
