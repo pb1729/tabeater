@@ -14,6 +14,7 @@ from html_rendering import render_sessions
 FILES_TO_SERVE = ['index.html', 'util.js', "style.css"]
 FILES_TO_SERVE_BIN = ['favicon.svg', 'None']
 PORT_NUM = 2693
+LOCAL_ADDR = "127.0.0.1" # localhost only
 
 
 class TabEater:
@@ -82,7 +83,7 @@ TabEaterEventServer = create_event_server_class("TabEaterEventServer",
 
 
 def start_server():
-    server_address = ('', PORT_NUM)
+    server_address = (LOCAL_ADDR, PORT_NUM)
     print("Starting a server at: http://localhost:%d" % server_address[1])
     httpd = ThreadingHTTPServer(server_address, TabEaterEventServer)
     httpd.serve_forever()
